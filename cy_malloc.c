@@ -83,13 +83,8 @@ void init_memory_allocator(uint32_t start_addr, uint32_t end_addr, uint32_t requ
 	if (requested_size == 0 || requested_size_in_desc)
 	  return;
 	
-	/* Big Block */
-	/* ---- needs to be implemented ---- */
-	if (requested_size >= PGSIZE/2) {
-	}
-	
 	/* block size smaller than PGSIZE/2, and the size is not in desc */
-	else {
+	if (requested_size < PGSIZE/2) {
 	  struct desc *d = requested_desc;
 	  d->block_size = requested_size;
 	  d->blocks_per_arena = (PGSIZE - sizeof (struct arena)) / requested_size;
@@ -119,9 +114,21 @@ void *cy_malloc(size_t n)
   }
 	
   /* Big Block */
-  /* ---- needs to be implemented ---- */
   if (d == descs + desc_cnt) 
   {
+    /* SIZE is too big for any descriptor.
+       Allocate enough pages to hold SIZE plus an arena.*/
+    size_t page_cnt = DIV_ROUND_UP(n + sizeof *a, PGSIZE);
+    a = palloc_get_page(page_cnt); 
+    if (a == NULL)
+      return NULL;
+
+    /* Initialize the arena to indicate a big block of PAGE_CNT
+       pages, and return it.*/
+    a->magic = ARENA_MAGIC;
+    a->desc = NULL;
+    a->free_cnt = page_cnt;
+    return a + 1;
   }
 
   /* If the free list is empty, create a new area */
@@ -164,14 +171,11 @@ void cy_free(void *p)
   struct desc *d = a->desc;
 
   /* Normal Block */
-  /* How to identify normal block and Big Block?
-  It was d != NULL in pintos */
   if (d != NULL) {
     /* Add block to free list. */
     list_push_front(&d->free_list, &b->free_elem);
 
     /* If the arena is now entirely unused, free it. */
-    /* ??? ++a ??? */
     if (++a->free_cnt >= d->blocks_per_arena) {
       size_t i;
 
@@ -186,9 +190,9 @@ void cy_free(void *p)
   }
 
   /* Big Block */
-  /* ---- needs to be implemented ---- */
   else {
-
+    palloc_free_page(a, a->free_cnt);
+    return;
   }
 }                        
 
