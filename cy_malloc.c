@@ -51,8 +51,12 @@ static struct block *arena_to_block (struct arena *, size_t idx);
 
 static void init_pool(struct pool *p, void *base, size_t page_cnt);
 
-/* Divides the given address area to pages with PGSIZE. 
-	 With the calculated free pages, it initializes memory pool.*/
+/* The start address, end address of the memory pool is given.
+   The size that will be frequently requested is given as requested_size.
+   This will be treated by the requested_desc descriptor.
+
+   Divides the given address area to pages with PGSIZE. 
+	 With the calculated free pages, it initializes the memory pool.*/
 void init_memory_allocator(uint32_t start_addr, uint32_t end_addr, uint32_t requested_size)
 {
 	/* Error handling. */
@@ -82,9 +86,15 @@ void init_memory_allocator(uint32_t start_addr, uint32_t end_addr, uint32_t requ
 	/* Initializes descriptor for requested_size. */
 	if (requested_size == 0 || requested_size_in_desc)
 	  return;
-	
-	/* block size smaller than PGSIZE/2, and the size is not in desc */
-	if (requested_size < PGSIZE/2) {
+
+  /* Error handling */
+  if (requested_size >= PGSIZE/2) {
+    printf("[ERROR] requested_size is equal or bigger than PGSIZE/2");
+    return;
+  }	
+	/* Initialize the requested_desc for blocks smaller than PGSIZE/2, 
+     and for the size that is not handled by desc */
+	else (requested_size < PGSIZE/2) {
 	  struct desc *d = requested_desc;
 	  d->block_size = requested_size;
 	  d->blocks_per_arena = (PGSIZE - sizeof (struct arena)) / requested_size;
@@ -92,6 +102,8 @@ void init_memory_allocator(uint32_t start_addr, uint32_t end_addr, uint32_t requ
 	}
 }
 
+/* Obtains and returns a new block of at least n bytes. 
+   Returns a null pointer if memory is not available. */
 void *cy_malloc(size_t n) 
 {
   struct desc *d;
@@ -158,6 +170,7 @@ void *cy_malloc(size_t n)
   return b;
 }    
 
+/* Frees block p, which must have been previously allocated with malloc(). */
 void cy_free(void *p)
 {
   /* Error handling */
@@ -214,6 +227,8 @@ static void init_pool(struct pool *p, void *base, size_t page_cnt)
   p->base = base + bm_pages * PGSIZE;
 }
 
+/* Obtains and returns a group of page_cnt contiguous free pages.
+   If too few pages are available, returns a null pointer. */
 void *palloc_get_page(size_t page_cnt)
 {
   struct pool *pool = &mem_pool;
@@ -233,6 +248,7 @@ void *palloc_get_page(size_t page_cnt)
   return pages;
 }
 
+/* Frees the page_cnt pages starting at pages. */
 void palloc_free_page(void *pages, size_t page_cnt)
 {
   struct pool *pool;
