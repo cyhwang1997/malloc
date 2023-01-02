@@ -12,8 +12,10 @@ int main (void) {
   printf("[CYTEST] a: %p\n", a);
   free(a);
   printf("[CYTEST] a: %p\n", a);
+
   /*With ~PGMASK, set the least significant 12 bits to 0.*/
   uint64_t *a_pg = (uint64_t *)((uintptr_t) a & ~PGMASK);
+
   /*Set the pool's size to have 20 pages.
     init_memory_allocator gets the address by uint format.*/
   uint64_t start_addr = (uint64_t) a_pg;
@@ -55,6 +57,7 @@ int main (void) {
   else
     printf("[CYTEST] mem32 has a NULL pointer.\n");
 
+  /*Allocate memory of Big Block.*/
   int *mem5K = cy_malloc(5000);
   if (mem5K != NULL)
     printf("[CYTEST] mem5K %p is allocated\n", mem5K);
