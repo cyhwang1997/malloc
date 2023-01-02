@@ -1,6 +1,7 @@
 #ifndef CY_MALLOC_H
 #define CY_MALLOC_H
 
+#include <stdint.h>
 
 void init_memory_allocator(uint32_t start_addr, uint32_t end_addr, uint32_t requested_size);
 void *cy_malloc(size_t n);

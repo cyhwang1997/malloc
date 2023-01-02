@@ -52,14 +52,17 @@ static inline size_t byte_cnt(size_t bit_cnt)
   return sizeof (elem_type) * elem_cnt(bit_cnt);
 }
 
+/* For debugging, print bitmap*/
+/*static inline void bitmap_print(struct bitmap *b);*/
+
 /* Returns a bit mask in which the bits actually used in the last
    element of B's bits are set to 1 and the rest are set to 0. */
-static inline elem_type last_mask(const struct bitmap *b) 
+/*static inline elem_type last_mask(const struct bitmap *b) 
 {
   int last_bits = b->bit_cnt % ELEM_BITS;
   return last_bits ? ((elem_type) 1 << last_bits) - 1 : (elem_type) -1;
 }
-
+*/
 /* Creation and destruction. */
 
 
@@ -179,14 +182,13 @@ size_t bitmap_scan(const struct bitmap *b, size_t start, size_t cnt, bool value)
   assert (b != NULL);
   assert (start <= b->bit_cnt);
 
-  if (cnt <= b->bit_cnt) 
-    {
+  if (cnt <= b->bit_cnt) {
       size_t last = b->bit_cnt - cnt;
       size_t i;
       for (i = start; i <= last; i++)
         if (!bitmap_contains(b, i, cnt, !value))
           return i; 
-    }
+  }
   return BITMAP_ERROR;
 }
 
@@ -205,3 +207,11 @@ size_t bitmap_scan_and_flip(struct bitmap *b, size_t start, size_t cnt, bool val
     bitmap_set_multiple(b, idx, cnt, !value);
   return idx;
 }
+
+/* Print bitmap. */
+/*static inline void bitmap_print(struct bitmap *b)
+{
+  for (size_t i = 0; i < b->bit_cnt; i++) {
+    printf("[CYDBG] bitmap[%zu]: %d\n", i, bitmap_test(b, i) ? 1 : 0);
+  }
+}*/

@@ -11,7 +11,7 @@
 struct pool
 {
 	struct bitmap *used_map;			/* Bitmap of free pages. */
-	uint32_t *base;								/* Base of pool. */
+	void *base;								/* Base of pool. */
 };
 
 static struct pool mem_pool;
@@ -44,7 +44,7 @@ struct block
 /* Our set of descriptors. */
 static struct desc descs[100];   /* Descriptors. */
 static size_t desc_cnt;         /* Number of descriptors. */
-static struct desc *requested_desc;	/* Descriptor for frequently requested size. */
+static struct desc requested_desc;	/* Descriptor for frequently requested size. */
 
 static struct arena *block_to_arena (struct block *);
 static struct block *arena_to_block (struct arena *, size_t idx);
@@ -67,7 +67,7 @@ void init_memory_allocator(uint32_t start_addr, uint32_t end_addr, uint32_t requ
 
 	/* Calculates number of free pages and initializes pool. */
 	size_t free_pages = (end_addr - start_addr) / PGSIZE;
-	init_pool(&mem_pool, (void *)start_addr, free_pages);
+	init_pool(&mem_pool, ((void *)start_addr), free_pages);
 
 
 	/* Initializes malloc() descriptors. */
@@ -94,9 +94,9 @@ void init_memory_allocator(uint32_t start_addr, uint32_t end_addr, uint32_t requ
   }	
 	/* Initialize the requested_desc for blocks smaller than PGSIZE/2, 
      and for the size that is not handled by desc */
-	else (requested_size < PGSIZE/2) {
-	  struct desc *d = requested_desc;
-	  d->block_size = requested_size;
+	else if (requested_size < PGSIZE/2) {
+	  struct desc *d = &requested_desc;
+	  d->block_size = (size_t)requested_size;
 	  d->blocks_per_arena = (PGSIZE - sizeof (struct arena)) / requested_size;
 	  list_init(&d->free_list);
 	}
@@ -114,8 +114,8 @@ void *cy_malloc(size_t n)
   if (n == 0)
     return NULL;
 	
-  if (n == requested_desc->block_size)
-    d = requested_desc;
+  if (n == requested_desc.block_size)
+    d = &requested_desc;
 
   /* Find the smallest descriptor that satisfies a SIZE-byte
      request. */
@@ -240,10 +240,12 @@ void *palloc_get_page(size_t page_cnt)
 
   page_idx = bitmap_scan_and_flip(pool->used_map, 0, page_cnt, false);
 
-  if (page_idx != BITMAP_ERROR)
-    pages = pool->base + PGSIZE * page_idx;
-  else
+  if (page_idx != BITMAP_ERROR) {
+    pages = pool->base + (PGSIZE * page_idx);
+  }
+  else {
     pages = NULL;
+  }
 
   return pages;
 }
