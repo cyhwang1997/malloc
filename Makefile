@@ -1,6 +1,6 @@
 CC = gcc
 
-CFLAGS = -Wall -Werror
+CFLAGS = -Wall -Werror -m32
 
 SRC_DIR = ./src
 OBJ_DIR = ./obj

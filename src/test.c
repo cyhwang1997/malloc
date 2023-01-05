@@ -8,20 +8,20 @@ int main (void) {
   printf("test begin\n");
 
   /*To get the heap area address, do malloc.*/
-  uint64_t *a = malloc(8);
+  uint32_t *a = malloc(8);
   printf("[CYTEST] a: %p\n", a);
   free(a);
   printf("[CYTEST] a: %p\n", a);
 
   /*With ~PGMASK, set the least significant 12 bits to 0.*/
-  uint64_t *a_pg = (uint64_t *)((uintptr_t) a & ~PGMASK);
+  uint32_t *a_pg = (uint32_t *)((uintptr_t) a & ~PGMASK);
 
   /*Set the pool's size to have 20 pages.
     init_memory_allocator gets the address by uint format.*/
-  uint64_t start_addr = (uint64_t) a_pg;
-  uint64_t end_addr = start_addr + (uint64_t)PGSIZE*20;
+  uint32_t start_addr = (uint32_t) a_pg;
+  uint32_t end_addr = start_addr + (uint32_t)PGSIZE*20;
 
-  printf("[CYTEST] start_addr: %llx\n", start_addr);
+  printf("[CYTEST] start_addr: %x\n", start_addr);
 
   printf("\n[CYTEST] --------init_memory_allocator--------\n");
   /*init_memory*/
