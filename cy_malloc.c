@@ -131,7 +131,7 @@ void *cy_malloc(size_t n)
     /* SIZE is too big for any descriptor.
        Allocate enough pages to hold SIZE plus an arena.*/
     size_t page_cnt = DIV_ROUND_UP(n + sizeof *a, PGSIZE);
-    a = palloc_get_page(page_cnt); 
+    a = (struct arena*)palloc_get_page(page_cnt); 
     if (a == NULL)
       return NULL;
 
@@ -149,7 +149,7 @@ void *cy_malloc(size_t n)
     size_t i;
 
   	/* Allocate a page. */
-	  a = palloc_get_page(1);
+	  a = (struct arena *)palloc_get_page(1);
     if (a == NULL)
       return NULL; 
 
@@ -179,7 +179,7 @@ void cy_free(void *p)
     return;
   }
 
-  struct block *b = p;
+  struct block *b = (struct block *)p;
   struct arena *a = block_to_arena(b);
   struct desc *d = a->desc;
 
@@ -270,7 +270,7 @@ void palloc_free_page(void *pages, size_t page_cnt)
 /* Returns the arena that block B is inside. */
 struct arena *block_to_arena(struct block *b)
 {
-  struct arena *a = pg_round_down(b);
+  struct arena *a = (struct arena *)pg_round_down(b);
 
   /* Check that the arena is valid. */
   assert(a != NULL);

@@ -71,7 +71,7 @@ static inline size_t byte_cnt(size_t bit_cnt)
    BLOCK_SIZE must be at least bitmap_needed_bytes(BIT_CNT). */
 struct bitmap *bitmap_create_in_buf(size_t bit_cnt, void *block, size_t block_size)
 {
-  struct bitmap *b = block;
+  struct bitmap *b = (struct bitmap *)block;
 
   assert(block_size >= bitmap_buf_size(bit_cnt));
 
