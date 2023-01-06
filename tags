@@ -1,0 +1,102 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+ARENA_MAGIC	src/cy_malloc.c	28;"	d	file:
+BITMAP_ERROR	include/cy_bitmap.h	23;"	d
+BITMASK	include/cy_vaddr.h	7;"	d
+CC	Makefile	/^CC = gcc$/;"	m
+CFLAGS	Makefile	/^CFLAGS = -Wall -Werror -m32$/;"	m
+CY_BITMAP_H	include/cy_bitmap.h	2;"	d
+CY_LIST_H	include/cy_list.h	2;"	d
+CY_MALLOC_H	include/cy_malloc.h	2;"	d
+CY_VADDR_H	include/cy_vaddr.h	2;"	d
+DEPS	Makefile	/^DEPS = $(SRCS:.c=.d)$/;"	m
+DIV_ROUND_UP	include/round.h	10;"	d
+ELEM_BITS	src/cy_bitmap.c	18;"	d	file:
+INCLUDE	Makefile	/^INCLUDE = -Iinclude\/$/;"	m
+OBJECTS	Makefile	/^OBJECTS = $(patsubst %.o,$(OBJ_DIR)\/%.o,$(OBJS))$/;"	m
+OBJS	Makefile	/^OBJS = $(SRCS:.c=.o)$/;"	m
+OBJ_DIR	Makefile	/^OBJ_DIR = .\/obj$/;"	m
+PGBITS	include/cy_vaddr.h	10;"	d
+PGMASK	include/cy_vaddr.h	12;"	d
+PGSHIFT	include/cy_vaddr.h	9;"	d
+PGSIZE	include/cy_vaddr.h	11;"	d
+ROUND_DOWN	include/round.h	14;"	d
+ROUND_H	include/round.h	2;"	d
+ROUND_UP	include/round.h	6;"	d
+SRCS	Makefile	/^SRCS = cy_malloc.c cy_list.c cy_bitmap.c test.c$/;"	m
+SRC_DIR	Makefile	/^SRC_DIR = .\/src$/;"	m
+TARGET	Makefile	/^TARGET = test$/;"	m
+arena	src/cy_malloc.c	/^struct arena $/;"	s	file:
+arena_to_block	src/cy_malloc.c	/^static struct block *arena_to_block(struct arena *a, size_t idx) $/;"	f	file:
+base	src/cy_malloc.c	/^	void *base;								\/* Base of pool. *\/$/;"	m	struct:pool	file:
+bit_cnt	src/cy_bitmap.c	/^  size_t bit_cnt;   \/* Number of bits. *\/$/;"	m	struct:bitmap	file:
+bit_mask	src/cy_bitmap.c	/^static inline elem_type bit_mask(size_t bit_idx) $/;"	f	file:
+bitmap	src/cy_bitmap.c	/^struct bitmap$/;"	s	file:
+bitmap_all	src/cy_bitmap.c	/^bool bitmap_all(const struct bitmap *b, size_t start, size_t cnt) $/;"	f
+bitmap_buf_size	src/cy_bitmap.c	/^size_t bitmap_buf_size(size_t bit_cnt)$/;"	f
+bitmap_contains	src/cy_bitmap.c	/^bool bitmap_contains(const struct bitmap *b, size_t start, size_t cnt, bool value) $/;"	f
+bitmap_create_in_buf	src/cy_bitmap.c	/^struct bitmap *bitmap_create_in_buf(size_t bit_cnt, void *block, size_t block_size)$/;"	f
+bitmap_mark	src/cy_bitmap.c	/^void bitmap_mark(struct bitmap *b, size_t bit_idx) $/;"	f
+bitmap_reset	src/cy_bitmap.c	/^void bitmap_reset(struct bitmap *b, size_t bit_idx) $/;"	f
+bitmap_scan	src/cy_bitmap.c	/^size_t bitmap_scan(const struct bitmap *b, size_t start, size_t cnt, bool value) $/;"	f
+bitmap_scan_and_flip	src/cy_bitmap.c	/^size_t bitmap_scan_and_flip(struct bitmap *b, size_t start, size_t cnt, bool value)$/;"	f
+bitmap_set	src/cy_bitmap.c	/^void bitmap_set(struct bitmap *b, size_t idx, bool value) $/;"	f
+bitmap_set_all	src/cy_bitmap.c	/^void bitmap_set_all(struct bitmap *b, bool value)$/;"	f
+bitmap_set_multiple	src/cy_bitmap.c	/^void bitmap_set_multiple(struct bitmap *b, size_t start, size_t cnt, bool value)$/;"	f
+bitmap_size	src/cy_bitmap.c	/^size_t bitmap_size(const struct bitmap *b)$/;"	f
+bitmap_test	src/cy_bitmap.c	/^bool bitmap_test(const struct bitmap *b, size_t idx) $/;"	f
+bits	src/cy_bitmap.c	/^  elem_type *bits;  \/* Elements that represent bits. *\/$/;"	m	struct:bitmap	file:
+block	src/cy_malloc.c	/^struct block $/;"	s	file:
+block_size	src/cy_malloc.c	/^    size_t block_size;          \/* Size of each element in bytes *\/$/;"	m	struct:desc	file:
+block_to_arena	src/cy_malloc.c	/^struct arena *block_to_arena(struct block *b)$/;"	f
+blocks_per_arena	src/cy_malloc.c	/^    size_t blocks_per_arena;    \/* Number of blocks in an arena *\/$/;"	m	struct:desc	file:
+byte_cnt	src/cy_bitmap.c	/^static inline size_t byte_cnt(size_t bit_cnt)$/;"	f	file:
+cy_free	src/cy_malloc.c	/^void cy_free(void *p)$/;"	f
+cy_malloc	src/cy_malloc.c	/^void *cy_malloc(size_t n) $/;"	f
+desc	src/cy_malloc.c	/^    struct desc *desc;          \/* Owning descriptor, NULL for big block. *\/$/;"	m	struct:arena	typeref:struct:arena::desc	file:
+desc	src/cy_malloc.c	/^struct desc$/;"	s	file:
+desc_cnt	src/cy_malloc.c	/^static size_t desc_cnt;         \/* Number of descriptors. *\/$/;"	v	file:
+descs	src/cy_malloc.c	/^static struct desc descs[100];   \/* Descriptors. *\/$/;"	v	typeref:struct:desc	file:
+elem_cnt	src/cy_bitmap.c	/^static inline size_t elem_cnt(size_t bit_cnt)$/;"	f	file:
+elem_idx	src/cy_bitmap.c	/^static inline size_t elem_idx(size_t bit_idx) $/;"	f	file:
+elem_type	src/cy_bitmap.c	/^typedef unsigned long elem_type;$/;"	t	file:
+free_cnt	src/cy_malloc.c	/^    size_t free_cnt;            \/* Free blocks; pages in big block. *\/$/;"	m	struct:arena	file:
+free_elem	src/cy_malloc.c	/^    struct list_elem free_elem; \/* Free list element. *\/$/;"	m	struct:block	typeref:struct:block::list_elem	file:
+free_list	src/cy_malloc.c	/^    struct list free_list;      \/* List of free blocks *\/$/;"	m	struct:desc	typeref:struct:desc::list	file:
+head	include/cy_list.h	/^  struct list_elem head;      \/* List head. *\/$/;"	m	struct:list	typeref:struct:list::list_elem
+init_memory_allocator	src/cy_malloc.c	/^void init_memory_allocator(uint32_t start_addr, uint32_t end_addr, uint32_t requested_size)$/;"	f
+init_pool	src/cy_malloc.c	/^static void init_pool(struct pool *p, void *base, size_t page_cnt)$/;"	f	file:
+is_interior	src/cy_list.c	/^static inline bool is_interior(struct list_elem *elem)$/;"	f	file:
+is_tail	src/cy_list.c	/^static inline bool is_tail(struct list_elem *elem)$/;"	f	file:
+list	include/cy_list.h	/^struct list $/;"	s
+list_begin	src/cy_list.c	/^struct list_elem *list_begin(struct list *list)$/;"	f
+list_elem	include/cy_list.h	/^struct list_elem $/;"	s
+list_empty	src/cy_list.c	/^bool list_empty(struct list *list)$/;"	f
+list_end	src/cy_list.c	/^struct list_elem *list_end(struct list *list)$/;"	f
+list_entry	include/cy_list.h	28;"	d
+list_front	src/cy_list.c	/^struct list_elem * list_front(struct list *list)$/;"	f
+list_init	src/cy_list.c	/^void list_init(struct list *list)$/;"	f
+list_insert	src/cy_list.c	/^void list_insert(struct list_elem *before, struct list_elem *elem)$/;"	f
+list_pop_front	src/cy_list.c	/^struct list_elem *list_pop_front(struct list *list)$/;"	f
+list_push_back	src/cy_list.c	/^void list_push_back(struct list *list, struct list_elem *elem)$/;"	f
+list_push_front	src/cy_list.c	/^void list_push_front(struct list *list, struct list_elem *elem)$/;"	f
+list_remove	src/cy_list.c	/^struct list_elem *list_remove(struct list_elem *elem)$/;"	f
+magic	src/cy_malloc.c	/^    unsigned magic;             \/* Always set to ARENA_MAGIC. *\/$/;"	m	struct:arena	file:
+main	src/test.c	/^int main (void) {$/;"	f
+mem_pool	src/cy_malloc.c	/^static struct pool mem_pool;$/;"	v	typeref:struct:pool	file:
+next	include/cy_list.h	/^  struct list_elem *next;     \/* Next list element. *\/$/;"	m	struct:list_elem	typeref:struct:list_elem::list_elem
+palloc_free_page	src/cy_malloc.c	/^void palloc_free_page(void *pages, size_t page_cnt)$/;"	f
+palloc_get_page	src/cy_malloc.c	/^void *palloc_get_page(size_t page_cnt)$/;"	f
+pg_no	include/cy_vaddr.h	/^static inline uintptr_t pg_no(const void *va) {$/;"	f
+pg_ofs	include/cy_vaddr.h	/^static inline unsigned pg_ofs(const void *va) {$/;"	f
+pg_round_down	include/cy_vaddr.h	/^static inline void *pg_round_down(const void *va) {$/;"	f
+pg_round_up	include/cy_vaddr.h	/^static inline void *pg_round_up(const void *va) {$/;"	f
+pool	src/cy_malloc.c	/^struct pool$/;"	s	file:
+prev	include/cy_list.h	/^  struct list_elem *prev;     \/* Previous list element. *\/$/;"	m	struct:list_elem	typeref:struct:list_elem::list_elem
+requested_desc	src/cy_malloc.c	/^static struct desc requested_desc;	\/* Descriptor for frequently requested size. *\/$/;"	v	typeref:struct:desc	file:
+tail	include/cy_list.h	/^  struct list_elem tail;      \/* List tail. *\/$/;"	m	struct:list	typeref:struct:list::list_elem
+used_map	src/cy_malloc.c	/^	struct bitmap *used_map;			\/* Bitmap of free pages. *\/$/;"	m	struct:pool	typeref:struct:pool::bitmap	file:

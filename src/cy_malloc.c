@@ -89,7 +89,7 @@ void init_memory_allocator(uint32_t start_addr, uint32_t end_addr, uint32_t requ
 
   /* Error handling */
   if (requested_size >= PGSIZE/2) {
-    printf("[ERROR] requested_size is equal or bigger than PGSIZE/2");
+    printf("[ERROR] requested_size %d is equal or bigger than PGSIZE/2 PGSZ: %d", requested_size, PGSIZE);
     return;
   }	
 	/* Initialize the requested_desc for blocks smaller than PGSIZE/2, 

@@ -21,23 +21,25 @@ int main (void) {
   uint32_t start_addr = (uint32_t) a_pg;
   uint32_t end_addr = start_addr + (uint32_t)PGSIZE*20;
 
-  printf("[CYTEST] start_addr: %x\n", start_addr);
+  printf("[CYTEST] start_addr: %x\n, PGSZ: 0x%x", start_addr, PGSIZE);
 
   printf("\n[CYTEST] --------init_memory_allocator--------\n");
   /*init_memory*/
-  init_memory_allocator(start_addr, end_addr, 20);
+  init_memory_allocator(start_addr, end_addr, 16384);
 
   printf("\n[CYTEST] --------cy_malloc--------\n");
   /*malloc*/
   /*Allocate memory smaller than 16B(the minimum size).*/
-  int *mem10 = cy_malloc(10);
+  //int *mem10 = cy_malloc(10);
+  int *mem10 = cy_malloc(0x100c);
   if (mem10 != NULL)
     printf("[CYTEST] mem10 %p is allocated\n", mem10);
   else
     printf("[CYTEST] mem10 has a NULL pointer.\n");
 
   /*Allocate memory of 16B. Free list of 16B has been made by cy_malloc(10).*/
-  int *mem16 = cy_malloc(16);
+  //int *mem16 = cy_malloc(16);
+  int *mem16 = cy_malloc(0x814);
   if (mem16 != NULL)
     printf("[CYTEST] mem16 %p is allocated\n", mem16);
   else
@@ -95,4 +97,14 @@ int main (void) {
   printf("[CYTEST] (before free) mem5K: %d\n", *mem5K);
   cy_free(mem5K);
   printf("[CYTEST] (after free) mem5K: %d\n", *mem5K);
+
+
+  for (int i = 0; i < 100; i ++){
+  	int *mem10 = cy_malloc(10);
+  	if (mem10 != NULL)
+    		printf("[CYTEST] mem10 %p is allocated\n", mem10);
+  	else
+    		printf("[CYTEST] mem10 has a NULL pointer.\n");
+  	cy_free(mem10);
+  }
 }
