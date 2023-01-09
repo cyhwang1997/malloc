@@ -8,20 +8,22 @@ int main (void) {
   printf("test begin\n");
 
   /*To get the heap area address, do malloc.*/
-  uint32_t *a = malloc(8);
+  uint32_t *a = malloc(PGSIZE*30);
   printf("[CYTEST] a: %p\n", a);
-  free(a);
+//  free(a);
   printf("[CYTEST] a: %p\n", a);
 
   /*With ~PGMASK, set the least significant 12 bits to 0.*/
   uint32_t *a_pg = (uint32_t *)((uintptr_t) a & ~PGMASK);
+  a_pg += PGSIZE;
 
   /*Set the pool's size to have 20 pages.
     init_memory_allocator gets the address by uint format.*/
   uint32_t start_addr = (uint32_t) a_pg;
   uint32_t end_addr = start_addr + (uint32_t)PGSIZE*20;
 
-  printf("[CYTEST] start_addr: %x\n, PGSZ: 0x%x", start_addr, PGSIZE);
+  printf("[CYTEST] start_addr: %x, PGSZ: 0x%x\n", start_addr, PGSIZE);
+  printf("[CYTEST] end_addr: %x\n", end_addr);
 
   printf("\n[CYTEST] --------init_memory_allocator--------\n");
   /*init_memory*/
@@ -99,12 +101,12 @@ int main (void) {
   printf("[CYTEST] (after free) mem5K: %d\n", *mem5K);
 
 
-  for (int i = 0; i < 100; i ++){
+/*  for (int i = 0; i < 100; i ++){
   	int *mem10 = cy_malloc(10);
   	if (mem10 != NULL)
     		printf("[CYTEST] mem10 %p is allocated\n", mem10);
   	else
     		printf("[CYTEST] mem10 has a NULL pointer.\n");
   	cy_free(mem10);
-  }
+  }*/
 }

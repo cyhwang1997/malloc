@@ -1,6 +1,6 @@
 CC = gcc
 
-CFLAGS = -Wall -Werror -m32
+CFLAGS = -Wall -Werror -m32 -g -fsanitize=address
 
 SRC_DIR = ./src
 OBJ_DIR = ./obj
