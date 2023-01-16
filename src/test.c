@@ -27,7 +27,16 @@ int main (void) {
 
   printf("\n[CYTEST] --------init_memory_allocator--------\n");
   /*init_memory*/
-  init_memory_allocator(start_addr, end_addr, 16384);
+  init_memory_allocator(start_addr, end_addr);
+//  init_memory_allocator(start_addr, end_addr, 16384);
+
+  printf("\n[CYTEST] --------cy_requested_size_initiator--------\n");
+  /*[ERROR] Requested_size same as the size in descriptors*/
+  cy_requested_size_initiator(32);
+  /*[ERROR] Requested size same as the PGSIZE*/
+  cy_requested_size_initiator(16384);
+  /*Normal requested size*/
+  cy_requested_size_initiator(20);
 
   printf("\n[CYTEST] --------cy_malloc--------\n");
   /*malloc*/
