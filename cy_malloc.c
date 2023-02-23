@@ -44,7 +44,7 @@ struct block
 /* Our set of descriptors. */
 static struct desc descs[100];   /* Descriptors. */
 static size_t desc_cnt;         /* Number of descriptors. */
-static struct desc requested_desc[100];	/* Descriptor for frequently requested size. */
+static struct desc requested_descs[100];	/* Descriptor for frequently requested size. */
 static size_t requested_desc_cnt; /* Number of requested_size descriptors. */
 
 static struct arena *block_to_arena (struct block *);
