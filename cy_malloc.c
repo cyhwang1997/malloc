@@ -44,7 +44,8 @@ struct block
 /* Our set of descriptors. */
 static struct desc descs[100];   /* Descriptors. */
 static size_t desc_cnt;         /* Number of descriptors. */
-static struct desc requested_desc;	/* Descriptor for frequently requested size. */
+static struct desc requested_desc[100];	/* Descriptor for frequently requested size. */
+static size_t requested_desc_cnt; /* Number of requested_size descriptors. */
 
 static struct arena *block_to_arena (struct block *);
 static struct block *arena_to_block (struct arena *, size_t idx);
@@ -57,7 +58,7 @@ static void init_pool(struct pool *p, void *base, size_t page_cnt);
 
    Divides the given address area to pages with PGSIZE. 
 	 With the calculated free pages, it initializes the memory pool.*/
-void init_memory_allocator(uint32_t start_addr, uint32_t end_addr, uint32_t requested_size)
+void init_memory_allocator(uint32_t start_addr, uint32_t end_addr)
 {
 	/* Error handling. */
 	if (start_addr >= end_addr) {
@@ -72,34 +73,42 @@ void init_memory_allocator(uint32_t start_addr, uint32_t end_addr, uint32_t requ
 
 	/* Initializes malloc() descriptors. */
 	size_t block_size;
-	bool requested_size_in_desc = false;
 	for (block_size = 16; block_size < PGSIZE / 2; block_size *= 2) {
-	  if (block_size == requested_size)
-	    requested_size_in_desc = true;
 	  struct desc *d = &descs[desc_cnt++];
 	  assert(desc_cnt <= sizeof descs / sizeof *descs);
 	  d->block_size = block_size;
 	  d->blocks_per_arena = (PGSIZE - sizeof (struct arena)) / block_size;
 	  list_init(&d->free_list);
 	}
+}
 
-	/* Initializes descriptor for requested_size. */
-	if (requested_size == 0 || requested_size_in_desc)
-	  return;
+void cy_requested_size_initiator(size_t requested_size)
+{
+  struct desc *d;
 
-  /* Error handling */
-  if (requested_size >= PGSIZE/2) {
-    printf("[ERROR] requested_size is equal or bigger than PGSIZE/2");
+  if (requested_size == 0) {
+    printf("[ERROR] requested_size is zero.\n");
     return;
-  }	
-	/* Initialize the requested_desc for blocks smaller than PGSIZE/2, 
-     and for the size that is not handled by desc */
-	else if (requested_size < PGSIZE/2) {
-	  struct desc *d = &requested_desc;
-	  d->block_size = (size_t)requested_size;
-	  d->blocks_per_arena = (PGSIZE - sizeof (struct arena)) / requested_size;
-	  list_init(&d->free_list);
-	}
+  }
+
+  for (d = descs; d < descs + desc_cnt; d++) {
+    if (d->block_size == requested_size) {
+      printf("[ERROR] requested_size is already defined in descriptor.\n");
+      return;
+    }
+  }
+
+  if (requested_size >= PGSIZE/2) {
+    printf("[ERROR] requested_size %d is equal or bigger than PGSIZE/2. PGSIZE: %d\n", requested_size, PGSIZE);
+    return;
+  }
+
+  else if (requested_size < PGSIZE/2) {
+    struct desc *d = &requested_descs[requested_desc_cnt++];
+    d->block_size = (size_t) requested_size;
+    d->blocks_per_arena = (PGSIZE - sizeof (struct arena)) / requested_size;
+    list_init(&d->free_list);
+  }
 }
 
 /* Obtains and returns a new block of at least n bytes. 
@@ -109,17 +118,25 @@ void *cy_malloc(size_t n)
   struct desc *d;
   struct block *b;
   struct arena *a;
-
+  bool requested_desc_allocated = false;
   /* A null pointer satisfies a request for 0 bytes. */
   if (n == 0)
     return NULL;
 	
-  if (n == requested_desc.block_size)
-    d = &requested_desc;
+  /* If the size is in the requested_size descriptor.*/
+  for (d = requested_descs; d < requested_descs + requested_desc_cnt; d++) {
+    if (d->block_size == n) {
+      requested_desc_allocated = true;
+      break;
+    }
+  }
+
+  if(requested_desc_allocated)
+    printf("[CYDBG] Requested_desc is allocated for size %d\n", n);
 
   /* Find the smallest descriptor that satisfies a SIZE-byte
      request. */
-  else {
+ if (!requested_desc_allocated) {
     for (d = descs; d < descs + desc_cnt; d++)
       if (d->block_size >= n)
         break;
